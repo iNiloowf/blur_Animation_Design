@@ -76,6 +76,30 @@ const handleHover = function (e) {
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
+/* Sticky navigation
+const initialCoords = section1.getBoundingClientRect();
+console.log(initialCoords);
+window.addEventListener('scroll', function () {
+  if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+});
+*/
+//Sticky navigation: Intersection Observer API
+
+const header = document.querySelector('.header');
+const naviHeight = nav.getBoundingClientRect().height;
+const StickyNav = function (entries) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+const header0bserver = new IntersectionObserver(StickyNav, {
+  root: null,
+  treshold: 0,
+  rootMargin: `-${naviHeight}px`,
+});
+header0bserver.observe(header);
 /*
 const headers = document.querySelector('header');
 const message = document.createElement('div');
