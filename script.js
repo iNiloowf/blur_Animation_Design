@@ -1,5 +1,5 @@
 'use strict';
-
+// Selecting DOM elements
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
@@ -11,7 +11,7 @@ const tabsContent = document.querySelectorAll('.operations__content');
 // Button Scroll
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
-
+// Open and close modal functions
 const openModal = function (e) {
   e.preventDefault();
   modal.classList.remove('hidden');
@@ -22,7 +22,7 @@ const closeModal = function () {
   modal.classList.add('hidden');
   overlay.classList.add('hidden');
 };
-
+// Event listeners for modal
 btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
 
 btnCloseModal.addEventListener('click', closeModal);
@@ -100,6 +100,41 @@ const header0bserver = new IntersectionObserver(StickyNav, {
   rootMargin: `-${naviHeight}px`,
 });
 header0bserver.observe(header);
+//Reveal section
+const allSections = document.querySelectorAll('.section');
+const revealSection = function (entries, Observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  Observer.unobserve(entry.target);
+};
+const section0bserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+allSections.forEach(function (section) {
+  section0bserver.observe(section);
+  section.classList.add('section--hidden');
+});
+//Lazy loading images
+const imgTarget = document.querySelectorAll('img[data-src]');
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  //Replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+const img0bserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+imgTarget.forEach(img => img0bserver.observe(img));
+
 /*
 const headers = document.querySelector('header');
 const message = document.createElement('div');
